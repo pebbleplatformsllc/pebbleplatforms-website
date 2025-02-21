@@ -5,13 +5,10 @@ import { ChevronRight } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
 import { DiscordSection } from "@/components/ui/DiscordSection";
 import { useScrollPosition } from "@/hooks/use-scroll-position";
-import Link from "next/link";
 import { FlipWords } from "@/components/ui/flip-words";
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { useState, useEffect } from "react";
 import { preloadImage } from "@/lib/utils";
-import { HeroVideoDialog } from "@/components/ui/hero-video-dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
