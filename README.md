@@ -1,6 +1,6 @@
-# No Loafing Website
+# Pebble Platforms Website
 
-**No Loafing Website** is a modern, responsive website built with Next.js and Tailwind CSS. It’s designed to showcase engaging gaming content (inspired by Roblox) with dynamic UI elements, smooth animations, and dark mode support.
+**Pebble Platforms Website** is a modern, responsive website built with Next.js and Tailwind CSS. It's designed to showcase innovative software solutions with dynamic UI elements, smooth animations, and dark mode support.
 
 ## Features
 
@@ -36,8 +36,8 @@
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/no-loafing-website.git
-   cd no-loafing-website
+   git clone https://github.com/yourusername/pebble-platforms-website.git
+   cd pebble-platforms-website
 # pebbleplatforms-website
 # pebbleplatforms-website
 # pebbleplatforms-website

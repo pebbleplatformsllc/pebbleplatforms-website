@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
-import { Logo } from "@/components/ui/logo";
 import { DiscordSection } from "@/components/ui/DiscordSection";
 import { useScrollPosition } from "@/hooks/use-scroll-position";
 import Link from "next/link";
@@ -13,13 +12,30 @@ import { LoadingScreen } from "@/components/ui/loading-screen";
 import { useState, useEffect } from "react";
 import { preloadImage } from "@/lib/utils";
 import { HeroVideoDialog } from "@/components/ui/hero-video-dialog";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
 
 export default function Home() {
   const { scrollPosition, direction, pastHero } = useScrollPosition();
   const isVisible = true; // Always visible on home page
   const [isLoading, setIsLoading] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const menuItems = [
+    { name: 'Platforms', icon: 'Layers' },
+    { name: 'Testimonials', icon: 'MessageSquare' },
+    { name: 'Discord', icon: 'Users' },
+    { name: 'Subscribe', icon: 'Bell' }
+  ];
+
+  const handleMenuClick = (itemName: string) => {
+    const element = document.getElementById(itemName.toLowerCase() === 'subscribe' ? 'contact' : itemName.toLowerCase());
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsOpen(false);
+    }
+  };
 
   useEffect(() => {
     const MIN_LOADING_TIME = 1000; // 1 second minimum loading time
@@ -29,8 +45,7 @@ export default function Home() {
     // Assets to preload
     const imagesToPreload = [
       '/images/hero-background.jpg',
-      '/images/game.png',
-      '/images/no-loafing.png'
+      '/images/game.png'
     ];
 
     // Preload all images
@@ -80,32 +95,119 @@ export default function Home() {
               <div className={`flex justify-between items-center transition-all duration-500 ease-in-out ${
             scrollPosition > 100 ? 'h-16' : 'h-20'
           }`}>
-                <div className="flex items-center">
+                <motion.div 
+                  className="flex items-center"
+                  initial={false}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <div className="relative group">
                     <div className="absolute -inset-2 bg-gradient-to-r from-[#3498db]/20 to-[#2980b9]/20 rounded-full blur-lg group-hover:blur-xl transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-                    <Logo className={`relative transition-all duration-500 ease-in-out group-hover:scale-110 ${
-                  scrollPosition > 100 ? 'text-xl' : 'text-2xl'
-                }`} />
+                    <img 
+                      src="/images/logo.png" 
+                      alt="Pebble Platforms Logo"
+                      className={`relative transition-all duration-500 ease-in-out group-hover:scale-110 ${
+                        scrollPosition > 100 ? 'h-8 w-8' : 'h-10 w-10'
+                      }`}
+                    />
                   </div>
-                </div>
+                </motion.div>
                 <div className="hidden md:flex items-center space-x-2">
-                  {['Games', 'Testimonials', 'Discord'].map((item) => (
-                    <Link
-                      key={item}
-                      href={`#${item.toLowerCase()}`}
+                  {menuItems.map((item) => (
+                    <button
+                      key={item.name}
+                      onClick={() => handleMenuClick(item.name)}
                       className={`relative px-4 py-2.5 transition-all duration-500 ease-in-out ${
                     scrollPosition > 100 
                       ? 'text-foreground hover:text-[#3498db]' 
                       : 'text-white/90 hover:text-white'
                   } rounded-lg group`}
                     >
-                      <span className="relative z-10">{item}</span>
+                      <span className="relative z-10">{item.name}</span>
                       <div className={`absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 ${
                     scrollPosition > 100 ? 'bg-[#3498db]/10' : 'bg-white/10'
                   }`}></div>
-                    </Link>
+                    </button>
                   ))}
                 </div>
+                <motion.div 
+                  className="md:hidden"
+                  initial={false}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className={`relative z-50 p-2 rounded-lg transition-all duration-300 ${
+                      isOpen 
+                        ? 'bg-white/10 text-white' 
+                        : 'text-white hover:bg-white/10'
+                    }`}
+                  >
+                    <motion.div
+                      animate={isOpen ? "open" : "closed"}
+                      variants={{
+                        open: { rotate: 90 },
+                        closed: { rotate: 0 }
+                      }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {isOpen ? (
+                        <X className="h-6 w-6" />
+                      ) : (
+                        <Menu className="h-6 w-6" />
+                      )}
+                    </motion.div>
+                  </button>
+                </motion.div>
+
+                <AnimatePresence>
+                  {isOpen && (
+                    <>
+                      <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        className="fixed inset-x-0 top-0 p-4 pt-20 bg-gradient-to-b from-background/98 to-background/95 backdrop-blur-xl border-b border-white/10 shadow-xl z-40 md:hidden"
+                      >
+                        <div className="flex items-center justify-between mb-6 px-2">
+                          <div className="flex items-center gap-3">
+                            <img 
+                              src="/images/logo.png" 
+                              alt="Pebble Platforms Logo"
+                              className="h-8 w-8"
+                            />
+                            <span className="text-lg font-semibold text-white">Menu</span>
+                          </div>
+                        </div>
+                        <nav className="grid grid-cols-2 gap-2">
+                          {menuItems.map((item, i) => (
+                            <motion.button
+                              key={item.name}
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              transition={{ delay: i * 0.05 }}
+                              onClick={() => handleMenuClick(item.name)}
+                              className="flex items-center justify-center gap-2 p-4 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200"
+                            >
+                              <span className="text-base font-medium text-white">{item.name}</span>
+                            </motion.button>
+                          ))}
+                        </nav>
+                      </motion.div>
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden"
+                        onClick={() => setIsOpen(false)}
+                      />
+                    </>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </nav>
@@ -130,10 +232,10 @@ export default function Home() {
                   <h1 className="text-4xl md:text-5xl font-bold text-white mb-12 leading-relaxed flex flex-col">
                     <FlipWords
                       words={[
-                        "Experience adventure",
-                        "Build amazing worlds",
-                        "Create epic stories",
-                        "Join the community"
+                        "Simplify your workflow",
+                        "Enhance productivity",
+                        "Transform experiences",
+                        "Innovate solutions"
                       ]}
                       duration={2500}
                       className="text-[#3498db]"
@@ -144,7 +246,7 @@ export default function Home() {
                       transition={{ duration: 0.5, delay: 0.2 }}
                       className="text-3xl md:text-4xl mt-2"
                     >
-                      &nbsp;No Loafing Games
+                      &nbsp;Pebble Platforms
                     </motion.span>
                   </h1>
                 </motion.div>
@@ -163,7 +265,7 @@ export default function Home() {
                     <Button
                       className="bg-[#3498db] hover:bg-[#2980b9] text-white px-8 py-6 rounded-lg text-lg transition-all duration-200 hover:shadow-lg hover:shadow-[#3498db]/20"
                       onClick={() => {
-                        const featuredSection = document.querySelector('#featured-game');
+                        const featuredSection = document.querySelector('#platforms');
                         featuredSection?.scrollIntoView({ behavior: 'smooth' });
                       }}
                     >
@@ -177,12 +279,15 @@ export default function Home() {
                     transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   >
                     <a 
-                      href="https://www.roblox.com" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                      onClick={() => {
+                        const contactSection = document.getElementById('contact');
+                        contactSection?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      href="#contact"
+                      className="cursor-pointer"
                     >
                       <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-6 rounded-lg text-lg transition-all duration-200 hover:shadow-lg hover:shadow-white/20">
-                        View us on Roblox
+                        Stay up to date
                       </Button>
                     </a>
                   </motion.div>
@@ -191,19 +296,9 @@ export default function Home() {
             </div>
           </section>
 
-          <BackgroundGradientAnimation
-            gradientBackgroundStart="#010204"
-            gradientBackgroundEnd="#030912"
-            firstColor="13, 38, 55"
-            secondColor="10, 32, 46"
-            thirdColor="18, 18, 48"
-            fourthColor="15, 22, 36"
-            fifthColor="8, 49, 111"
-            className="relative z-10"
-            containerClassName="relative z-10"
-          >
-            {/* Featured Game */}
-            <section id="games" className="pt-32 pb-20 relative">
+          <div className="relative bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_rgba(52,152,219,0.1)_0%,_transparent_70%)] after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_center,_rgba(41,128,185,0.1)_0%,_transparent_70%)]">
+            {/* Featured Platform */}
+            <section id="platforms" className="pt-32 pb-20 relative z-10">
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#3498db]/5 to-transparent opacity-50"></div>
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.div 
@@ -221,18 +316,13 @@ export default function Home() {
                     className="relative"
                   >
                     <div className="absolute -inset-1 bg-gradient-to-r from-[#3498db]/20 via-[#2980b9]/20 to-[#3498db]/20 rounded-lg blur-lg"></div>
-                    <motion.div 
-                      className="relative"
+                    <motion.img
+                      src="/images/game.png"
+                      alt="Featured Platform"
+                      className="w-full rounded-lg shadow-2xl ring-1 ring-white/10"
                       whileHover={{ scale: 1.02 }}
                       transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                    >
-                      <HeroVideoDialog
-                        animationStyle="from-left"
-                        videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-                        thumbnailSrc="/images/game.png"
-                        thumbnailAlt="Highlands Gameplay"
-                      />
-                    </motion.div>
+                    />
                   </motion.div>
                   <motion.div 
                     initial={{ opacity: 0, x: 50 }}
@@ -247,8 +337,8 @@ export default function Home() {
                       viewport={{ once: true }}
                       transition={{ duration: 0.4, delay: 0.6 }}
                     >
-                      <h2 className="text-base font-semibold text-[#3498db] mb-2">Featured Game</h2>
-                      <h3 className="text-3xl font-bold mb-6 text-white">The Highlands</h3>
+                      <h2 className="text-base font-semibold text-[#3498db] mb-2">Upcoming Release</h2>
+                      <h3 className="text-3xl font-bold mb-6 text-white">Cobble</h3>
                     </motion.div>
                     <div className="space-y-6 text-muted-foreground">
                       <motion.p 
@@ -258,9 +348,9 @@ export default function Home() {
                         transition={{ duration: 0.4, delay: 0.7 }}
                         className="leading-relaxed"
                       >
-                        Embark on an epic adventure in Highlands, where magic and mystery await at every turn. 
-                        Explore vast landscapes, battle mythical creatures, and uncover ancient secrets in this 
-                        immersive Roblox experience.
+                        Explore US Census data like never before with Cobble. Our intuitive platform transforms complex
+                        census information into clear, actionable insights, powered by advanced AI to help you find
+                        exactly what you need.
                       </motion.p>
                       <motion.div 
                         initial={{ opacity: 0, y: 20 }}
@@ -272,19 +362,19 @@ export default function Home() {
                         <div className="space-y-2">
                           <div className="font-medium text-white">Features</div>
                           <ul className="list-disc list-inside space-y-1">
-                            <li>Vast open world</li>
-                            <li>Epic boss battles</li>
-                            <li>Unique magic system</li>
-                            <li>Multiplayer quests</li>
+                            <li>AI-powered data queries</li>
+                            <li>Interactive visualizations</li>
+                            <li>Historical trends analysis</li>
+                            <li>Demographic insights</li>
                           </ul>
                         </div>
                         <div className="space-y-2">
                           <div className="font-medium text-white">Coming Soon</div>
                           <ul className="list-disc list-inside space-y-1">
-                            <li>New dungeons</li>
-                            <li>Pet system</li>
-                            <li>Player housing</li>
-                            <li>Trading system</li>
+                            <li>Custom data exports</li>
+                            <li>Predictive modeling</li>
+                            <li>Cross-dataset analysis</li>
+                            <li>API access</li>
                           </ul>
                         </div>
                       </motion.div>
@@ -296,9 +386,11 @@ export default function Home() {
                         className="pt-4"
                       >
                         <a 
-                          href="https://www.roblox.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          onClick={() => {
+                            const contactSection = document.getElementById('contact');
+                            contactSection?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                          href="#contact"
                           className="inline-block"
                         >
                           <motion.div
@@ -311,7 +403,7 @@ export default function Home() {
                             <Button
                               className="relative bg-[#3498db] hover:bg-[#2980b9] text-white px-4 py-2 text-sm font-semibold transition-colors duration-200"
                             >
-                              Play Now
+                              Learn More
                               <ChevronRight className="ml-2 h-4 w-4 inline-block" />
                             </Button>
                           </motion.div>
@@ -324,7 +416,7 @@ export default function Home() {
             </section>
 
             {/* Marquee Reviews */}
-            <section id="testimonials" className="pt-32 pb-16">
+            <section id="testimonials" className="pt-32 pb-16 relative z-10">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -332,19 +424,19 @@ export default function Home() {
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="text-base font-semibold text-[#3498db] text-center mb-2">Testimonials</h2>
-                <h2 className="text-3xl font-bold text-center mb-12 text-white">What Our Players Say</h2>
+                <h2 className="text-3xl font-bold text-center mb-12 text-white">What Our Users Say</h2>
               </motion.div>
               <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
                 {[
                   Array(3).fill([
-                    { name: "Alex", username: "@alex", body: "The most innovative Roblox games I've ever played!", img: "https://avatar.vercel.sh/alex" },
-                    { name: "Sarah", username: "@sarah", body: "Incredible attention to detail in every game. Simply amazing!", img: "https://avatar.vercel.sh/sarah" },
-                    { name: "Mike", username: "@mike", body: "The community is fantastic. I've made so many friends here!", img: "https://avatar.vercel.sh/mike" }
+                    { name: "Alex", username: "@alex", body: "The AI-powered data analysis tools have transformed how we work with census data.", img: "https://avatar.vercel.sh/alex" },
+                    { name: "Sarah", username: "@sarah", body: "Cobble's visualization features make complex data instantly understandable.", img: "https://avatar.vercel.sh/sarah" },
+                    { name: "Mike", username: "@mike", body: "The platform's intuitive interface has streamlined our entire research process.", img: "https://avatar.vercel.sh/mike" }
                   ]),
                   Array(3).fill([
-                    { name: "Emma", username: "@emma", body: "These games keep getting better and better!", img: "https://avatar.vercel.sh/emma" },
-                    { name: "David", username: "@david", body: "The best Roblox game developer I've encountered!", img: "https://avatar.vercel.sh/david" },
-                    { name: "Lisa", username: "@lisa", body: "Can't stop playing these amazing games!", img: "https://avatar.vercel.sh/lisa" }
+                    { name: "Emma", username: "@emma", body: "The real-time data updates and trend analysis are game-changing for our team.", img: "https://avatar.vercel.sh/emma" },
+                    { name: "David", username: "@david", body: "Best data platform I've used - the AI suggestions are incredibly accurate.", img: "https://avatar.vercel.sh/david" },
+                    { name: "Lisa", username: "@lisa", body: "Customer support is exceptional, and new features are constantly being added.", img: "https://avatar.vercel.sh/lisa" }
                   ])
                 ].map((row, idx) => (
                   <Marquee
@@ -388,7 +480,7 @@ export default function Home() {
             </section>
 
             {/* Discord Section */}
-            <section id="discord" className="pb-8 relative">
+            <section id="discord" className="pb-8 relative z-10">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -400,7 +492,7 @@ export default function Home() {
             </section>
 
             {/* Contact Section */}
-            <section id="contact" className="pb-40">
+            <section id="contact" className="pb-40 relative z-10">
               <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -460,14 +552,14 @@ export default function Home() {
             </section>
 
             {/* Footer */}
-            <footer className="pt-20 pb-12">
+            <footer className="pt-20 pb-12 relative z-10">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center">
-                  <div className="text-muted-foreground text-sm">© 2025 No Loafing. All rights reserved.</div>
+                  <div className="text-muted-foreground text-sm">© 2025 Pebble Platforms LLC. All rights reserved.</div>
                 </div>
               </div>
             </footer>
-          </BackgroundGradientAnimation>
+          </div>
         </div>
       )}
     </main>

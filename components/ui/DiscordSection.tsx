@@ -1,24 +1,24 @@
 'use client'
 
-import { Users, Code, Gamepad2, MessagesSquare } from "lucide-react"
+import { Users, Code, Lightbulb, MessageSquare, GitBranch, Workflow } from "lucide-react"
 import { motion } from "framer-motion";
 
 const features = [
   {
-    name: 'Game Development Community',
+    name: 'Technical Collaboration',
     description:
-      'Connect with fellow Roblox developers, share your experiences, and get feedback on your games from our active community.',
+      'Collaborate with industry professionals, share technical insights, and get expert feedback on implementation challenges.',
+    icon: GitBranch,
+  },
+  {
+    name: 'Innovation Hub',
+    description: 'Access beta features, participate in technical discussions, and influence our product roadmap through direct feedback.',
+    icon: Lightbulb,
+  },
+  {
+    name: 'Technical Support',
+    description: 'Get real-time support from our engineering team, access implementation guides, and join technical Q&A sessions.',
     icon: Code,
-  },
-  {
-    name: 'Beta Testing',
-    description: 'Join exclusive beta testing sessions for upcoming game features and help shape the future of our games.',
-    icon: Gamepad2,
-  },
-  {
-    name: 'Live Events & Updates',
-    description: 'Stay informed about game updates, special events, and participate in live Q&A sessions with our dev team.',
-    icon: MessagesSquare,
   },
 ]
 
@@ -40,10 +40,10 @@ export function DiscordSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <h2 className="text-base font-semibold text-[#3498db] mb-2">Join Our Discord</h2>
-              <h3 className="text-3xl font-bold text-white mb-12">Help Us Build Amazing Games</h3>
+              <h2 className="text-base font-semibold text-[#3498db] mb-2">Developer Community</h2>
+              <h3 className="text-3xl font-bold text-white mb-6">Join Our Technical Hub</h3>
               <p className="mt-6 text-base text-gray-300">
-                Join our thriving Discord community where Roblox developers and players come together. Get early access to features, participate in events, and help shape the future of our games.
+                Connect with our engineering team and fellow developers in our technical community. Share insights, get implementation support, and stay updated on our latest platform innovations.
               </p>
               <dl className="mt-10 max-w-xl space-y-8 text-base text-gray-300 lg:max-w-none">
                 {features.map((feature) => (
@@ -60,7 +60,7 @@ export function DiscordSection() {
                 <motion.a
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  href="https://discord.gg"
+                  href="https://discord.gg/CQf9hGby"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center rounded-md bg-[#3498db] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2980b9] transition-colors duration-200"

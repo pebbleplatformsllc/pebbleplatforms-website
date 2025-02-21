@@ -15,7 +15,7 @@ interface Testimonial {
 }
 
 const featuredTestimonial: Testimonial = {
-  body: 'The games from No Loafing are absolutely amazing! The attention to detail and creativity in each game is outstanding.',
+  body: 'The software solutions from Pebble Platforms are absolutely amazing! The attention to detail and innovation in each platform is outstanding.',
   author: {
     name: 'Brenna Goyette',
     handle: 'brennagoyette',
@@ -28,7 +28,7 @@ const testimonials: Testimonial[][][] = [
   [
     [
       {
-        body: 'No Loafing has created some of the most engaging Roblox experiences I\'ve ever played. Their games are truly next level!',
+        body: 'Pebble Platforms has created some of the most intuitive software solutions I\'ve ever used. Their platforms are truly next level!',
         author: {
           name: 'Leslie Alexander',
           handle: 'lesliealexander',
@@ -39,7 +39,7 @@ const testimonials: Testimonial[][][] = [
     ],
     [
       {
-        body: 'The community support and constant updates make every No Loafing game a fresh and exciting experience.',
+        body: 'The customer support and constant updates make every Pebble Platforms solution a reliable and efficient experience.',
         author: {
           name: 'Lindsay Walton',
           handle: 'lindsaywalton',
@@ -52,7 +52,7 @@ const testimonials: Testimonial[][][] = [
   [
     [
       {
-        body: 'As a long-time Roblox player, I\'m impressed by the innovation and quality in every No Loafing release.',
+        body: 'As a long-time user, I\'m impressed by the innovation and quality in every Pebble Platforms release.',
         author: {
           name: 'Tom Cook',
           handle: 'tomcook',
@@ -63,7 +63,7 @@ const testimonials: Testimonial[][][] = [
     ],
     [
       {
-        body: 'The attention to player feedback and continuous improvements show how much No Loafing cares about their community.',
+        body: 'The attention to user feedback and continuous improvements show how much Pebble Platforms cares about their customers.',
         author: {
           name: 'Leonard Krasner',
           handle: 'leonardkrasner',
